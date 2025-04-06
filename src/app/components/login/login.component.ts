@@ -1,6 +1,7 @@
+import { catchError, tap, of, finalize } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { catchError, tap, of } from 'rxjs';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ApiService } from '../../services/api.service';
 
@@ -19,15 +20,33 @@ export class LoginComponent {
   username = ''
   password = ''
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router
+  ) {}
 
   onSubmit() {
     this.apiService.login(this.username, this.password)
       .pipe(
-        tap((res: LoginResponse) => console.log('Token:', res.token)),
+        tap((res: LoginResponse) => {
+          try {
+            console.log(res.token)
+            localStorage.setItem('token', res.token)
+          } catch (error) {
+            console.error('Error storing token in localStorage', error)
+            throw error
+          }
+        }),
         catchError(err => {
           console.error('Login failed')
           return of(err)
+        }),
+        finalize(() => {
+          if (localStorage.getItem('token')) {
+            this.router.navigate(['/tasks'])
+          } else {
+            console.error('Token not found, redirect failed')
+          }
         })
       ).subscribe()
   }
