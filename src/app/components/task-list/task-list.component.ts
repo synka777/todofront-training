@@ -1,6 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { tap, catchError, of } from 'rxjs';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgFor } from '@angular/common';
 
 import { ApiService } from '../../services/api.service';
@@ -17,7 +18,7 @@ export class TaskListComponent {
   tasks: Task[] = []
   newTaskTitle: string = ''
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
   ngOnInit() {
     this.apiService.getTasks().pipe(
@@ -90,5 +91,10 @@ export class TaskListComponent {
         return of(err)
       })
     ).subscribe()
+  }
+
+  logout() {
+    this.apiService.logout()
+    this.router.navigate(['/login'])
   }
 }

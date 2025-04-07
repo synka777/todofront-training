@@ -46,4 +46,8 @@ export class ApiService {
   login(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login/`, { username, password })
   }
+
+  logout(): void {
+    localStorage.removeItem('token');
+  }
 }
