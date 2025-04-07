@@ -27,7 +27,7 @@ export class LoginComponent {
 
   onSubmit() {
     this.apiService.login(this.username, this.password)
-      .pipe(
+      .pipe( // Define a custom interface to understand what's returned by the API call
         tap((res: LoginResponse) => {
           try {
             console.log(res.token)
@@ -51,5 +51,4 @@ export class LoginComponent {
         })
       ).subscribe()
   }
-
 }

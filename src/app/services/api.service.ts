@@ -9,6 +9,8 @@ interface LoginResponse {
   token: string
 }
 
+// Provide this service in the root injector — make it a singleton that lives as long as the app does.
+// Useful when should be instanciated once and available app-wide
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +20,7 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   private getHeaders() {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token') // Store the token in local storage
     console.log('Retrieved token from storage:', token)
     return {
       headers: new HttpHeaders({
@@ -39,7 +41,7 @@ export class ApiService {
     return this.http.put<Task>(`${this.apiUrl}/tasks/update/${task.id}`, task, this.getHeaders())
   }
 
-  deleteTask(id: number) {
+  deleteTask(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/tasks/delete/${id}`, this.getHeaders())
   }
 

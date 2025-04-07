@@ -7,7 +7,8 @@
         <button (click)="deleteTask(task.id!)">🗑️</button>
     </li>
 </ul>
-<form (ngSubmit)="addTask()" #taskForm="ngForm">
+<form (ngSubmit)="addTask()" #taskForm="ngForm"> <!-- NgModel needs FormsModule! -->
     <input type="text" name="title" [(ngModel)]="newTaskTitle">
     <button type="submit">Add task</button>
+    <!-- <button [disabled]="!taskForm.valid">Add Task</button> -->
 </form>

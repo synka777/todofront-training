@@ -1,6 +1,6 @@
+import { tap, catchError, of, EMPTY } from 'rxjs';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { tap, catchError, of } from 'rxjs';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -29,13 +29,16 @@ export class TaskListComponent {
       }),
       catchError((err) => {
         console.error('Failed to get tasks', err)
+        // Return an observable to satisfy the type requirement
+        // Only use this if you need to use hthe err into another Observable
+        // Else, just use EMPTY
         return of(err)
       }),
     ).subscribe()
   }
 
   addTask() {
-    if (!this.newTaskTitle.trim()) return
+    if (!this.newTaskTitle.trim()) return // Check if there actually is a value
 
     const newTask: Task = {
       title: this.newTaskTitle.trim(),
@@ -44,35 +47,27 @@ export class TaskListComponent {
 
     this.apiService.addTask(newTask).pipe(
       tap((createdTask) => {
-        try {
           this.tasks.push(createdTask)
           this.newTaskTitle = ''
-        } catch (error) {
-          throw error
-        }
       }),
       catchError((err) => {
         console.error(err)
-        return of(err) // Return an observable to satisfy the type requirement
+        return EMPTY
       })
     ).subscribe()
   }
 
 
+// Calling this function on a task with (click) creates an active link with said task
   toggleTask(task: Task) {
+    // Take the task and just update the completed field
     const updatedTask = {...task, completed: !task.completed}
 
     this.apiService.updateTask(updatedTask).pipe(
-      tap(() => {
-        try {
-          task.completed = updatedTask.completed
-        } catch (error) {
-          throw error
-        }
-      }),
+      tap(() => task.completed = updatedTask.completed),
       catchError((err) => {
         console.error('Failed to update task', err)
-        return of(err)
+        return EMPTY
       })
     ).subscribe()
   }
@@ -80,22 +75,16 @@ export class TaskListComponent {
 
   deleteTask(id: number) {
     this.apiService.deleteTask(id).pipe(
-      tap(() => {
-        try {
-          this.tasks = this.tasks.filter((task) => task.id !== id)
-        } catch (error) {
-          throw error
-        }
-      }),
+      tap(() => this.tasks = this.tasks.filter((task) => task.id !== id)),
       catchError((err) => {
         console.error('Failed to delete task', err)
-        return of(err)
+        return EMPTY
       })
     ).subscribe()
   }
 
   logout() {
-    this.apiService.logout()
+    this.apiService.logout() // <= Just removeItem() the token from storage
     this.router.navigate(['/login'])
   }
 }
