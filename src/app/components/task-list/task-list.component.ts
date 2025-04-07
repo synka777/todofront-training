@@ -1,8 +1,8 @@
+import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { tap, catchError, of } from 'rxjs';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgFor } from '@angular/common';
 
 import { ApiService } from '../../services/api.service';
 import { Task } from '../../models/task.model';
@@ -10,13 +10,14 @@ import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-task-list',
-  imports: [ NgFor, FormsModule ],
+  imports: [ NgIf, NgFor, FormsModule ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss'
 })
 export class TaskListComponent {
   tasks: Task[] = []
   newTaskTitle: string = ''
+  username = localStorage.getItem('username')
 
   constructor(private apiService: ApiService, private router: Router) {}
 

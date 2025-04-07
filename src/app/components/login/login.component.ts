@@ -32,6 +32,7 @@ export class LoginComponent {
           try {
             console.log(res.token)
             localStorage.setItem('token', res.token)
+            localStorage.setItem('username', this.username)
           } catch (error) {
             console.error('Error storing token in localStorage', error)
             throw error
