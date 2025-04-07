@@ -36,11 +36,11 @@ export class ApiService {
   }
 
   updateTask(task: Task): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl}/tasks/update/${task.id}/`, task, this.getHeaders())
+    return this.http.put<Task>(`${this.apiUrl}/tasks/update/${task.id}`, task, this.getHeaders())
   }
 
   deleteTask(id: number) {
-    return this.http.delete<void>(`${this.apiUrl}/tasks/delete/${id}/`, this.getHeaders())
+    return this.http.delete<void>(`${this.apiUrl}/tasks/delete/${id}`, this.getHeaders())
   }
 
   login(username: string, password: string): Observable<LoginResponse> {
