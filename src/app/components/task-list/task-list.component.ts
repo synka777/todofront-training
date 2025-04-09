@@ -5,12 +5,13 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ApiService } from '../../services/api.service';
+import { TaskComponent } from '../task/task.component';
 import { Task } from '../../models/task.model';
 
 
 @Component({
   selector: 'app-task-list',
-  imports: [ NgIf, NgFor, FormsModule ],
+  imports: [NgIf, NgFor, FormsModule, TaskComponent],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss'
 })

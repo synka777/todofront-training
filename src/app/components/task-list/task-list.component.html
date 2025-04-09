@@ -1,12 +1,20 @@
 <button (click)="logout()">Logout</button>
 <p *ngIf="username">Welcome, {{ username }}!</p>
 <ul>
+    <app-task
+      *ngFor="let task of tasks"
+      [task]="task"
+      (toggle)="toggleTask($event)"
+      (delete)="deleteTask($event)">
+    </app-task>
+</ul>
+<!-- <ul>
     <li *ngFor="let task of tasks">
         <p>{{ task.title }} - {{ task.completed ? 'Done' : 'To do' }}</p>
         <button (click)="toggleTask(task)">✓</button>
         <button (click)="deleteTask(task.id!)">🗑️</button>
     </li>
-</ul>
+</ul> -->
 <form (ngSubmit)="addTask()" #taskForm="ngForm"> <!-- NgModel needs FormsModule! -->
     <input type="text" name="title" [(ngModel)]="newTaskTitle">
     <button type="submit">Add task</button>

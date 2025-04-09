@@ -1,0 +1,5 @@
+<li>
+  <p>{{ task.title }} - {{ task.completed ? "Done" : "Todo" }}</p>
+  <button (click)="onToggle()">✓</button>
+  <button (click)="onDelete()">🗑️</button>
+</li>
